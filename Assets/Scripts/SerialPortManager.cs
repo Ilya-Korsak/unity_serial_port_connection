@@ -85,7 +85,7 @@ public class SerialPortManager : MonoBehaviour
                 if (selectedPort.IsOpen) { print("Open"); }
             }
         }
-        catch( e)
+        catch
         {
             Debug.Log("Port is not opend");
         }
