@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO.Ports;
 using UnityEngine.Events;
+using System;
+using System.Threading;
+using System.Reflection;
 
 public enum PortSpeed : int
 {
@@ -34,6 +37,15 @@ public class SerialPortManager : MonoBehaviour
     [Header("Com port events")]
     public UnityEvent<List<string>> onPortsUpdated;
     public UnityEvent<string> onDataRecived;
+    [SerializeField]
+    [Tooltip("If you gonna to use onDataRecive - set TRUE, if not - FALSE")]
+    private bool isOnDataRecivedUsing = true;
+    [Header("Serial Parser")]
+    [Tooltip("Returns string after keyword")]
+    public ParserElement[] elements;
+
+    private event Action mainThreadQueuedCallbacks;
+    private event Action eventsClone;
     private bool CompareLists(List<string> list1, List<string> list2)
     {
         if (list1.Count != list2.Count)
@@ -65,6 +77,88 @@ public class SerialPortManager : MonoBehaviour
         prev_timming = Time.deltaTime;
         next_timming = Time.deltaTime;
         availablePortNamesList = new List<string>();
+        Thread recieveThread = new Thread(ReceiveMessage);
+        recieveThread.Start();
+    }
+    private int CompareCommand(string command, string word)
+    {
+        if (command.Length > word.Length)
+        {
+            return -1;
+        }
+        int index = -1;
+        bool isMatched = true;
+        int i;
+        for(i=0; i<command.Length; i++)
+        {
+            if(word[i] != command[i])
+            {
+                isMatched = false;
+                break;
+            }
+        }
+        if (isMatched)
+        {
+            index = i;
+        }
+        return index;
+    }
+    private void ReceiveMessage()
+    {
+        {
+            while (true)
+            {
+                if (selectedPort != null)
+                {
+                    try
+                    {
+                        if (!selectedPort.IsOpen)
+                        {
+                            selectedPort.Open();
+                            print("opened sp");
+                        }
+                        if (selectedPort.IsOpen)
+                        {
+                            if (selectedPort.BytesToRead > 0)
+                            {
+                                string serialString = selectedPort.ReadLine();
+                                for (int i = 0; i < elements.Length; i++)
+                                {
+                                    int index = CompareCommand(elements[i].command, serialString);
+                                    if (index != -1 && elements[i].isSubstring)
+                                    {
+                                        ParserElement pElm = elements[i];
+                                        string stringToSent = serialString.Substring(index);
+                                        mainThreadQueuedCallbacks += () =>
+                                        {
+                                            pElm.Action.Invoke(stringToSent);
+                                        };
+                                    }
+                                    else if (index != -1 && !elements[i].isSubstring)
+                                    {
+                                        ParserElement pElm = elements[i];
+                                        mainThreadQueuedCallbacks += () =>
+                                        {
+                                            pElm.Action.Invoke(serialString);
+                                        };
+                                    }
+                                }
+                                if (isOnDataRecivedUsing)
+                                {
+                                    mainThreadQueuedCallbacks += () => {
+                                        onDataRecived.Invoke(serialString);
+                                    };
+                                }
+                            }
+                        }
+                    }
+                    catch
+                    {
+                        //SOMETHING
+                    }
+                }
+            }
+        }
     }
     public void TrySetPort(string portName, PortSpeed baudRate)
     {
@@ -142,8 +236,8 @@ public class SerialPortManager : MonoBehaviour
     }
     void Update()
     {
-
-        if((prev_timming + portsListRefreshDelay) < next_timming)
+        //onDataListeners = onDataRecived.GetListenerNumber();
+        if ((prev_timming + portsListRefreshDelay) < next_timming)
         {
             UpdatePortList();
 
@@ -154,31 +248,14 @@ public class SerialPortManager : MonoBehaviour
             }
             prev_timming = next_timming;
         }
-        if (selectedPort != null )
-        {
-            try
-            {
-                if (!selectedPort.IsOpen)
-                {
-                    selectedPort.Open();
-                    print("opened sp");
-                }
-                if (selectedPort.IsOpen)
-                {
-                    if (selectedPort.BytesToRead > 0)
-                    {
-                        string serialString = selectedPort.ReadLine();
-                        // Debug.Log(serialString);
-                        onDataRecived.Invoke(serialString);
-                    }
-                }
-            }
-            catch
-            {
-                //SOMETHING
-            }
-        }
         next_timming += Time.deltaTime;
+        if (mainThreadQueuedCallbacks != null)
+        {
+            eventsClone = mainThreadQueuedCallbacks;
+            mainThreadQueuedCallbacks = null;
+            eventsClone.Invoke();
+            eventsClone = null;
+        }
     }
     private void OnApplicationQuit()
     {
