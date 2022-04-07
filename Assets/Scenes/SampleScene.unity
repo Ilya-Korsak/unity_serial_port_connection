@@ -633,118 +633,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 451527973}
   m_CullTransparentMesh: 1
---- !u!1 &633825766
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 633825768}
-  - component: {fileID: 633825767}
-  m_Layer: 0
-  m_Name: SerialPortManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &633825767
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 633825766}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b9a0fb0eb32ca34ba147aabd861c728, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  availablePortNamesList: []
-  choosedPortName: 
-  portsListRefreshDelay: 1
-  onPortsUpdated:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 319342135}
-        m_TargetAssemblyTypeName: SerialTester, Assembly-CSharp
-        m_MethodName: GetPorts
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  onDataRecived:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1696312326}
-        m_TargetAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
-        m_MethodName: set_text
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  isOnDataRecivedUsing: 0
-  elements:
-  - command: 'TIMMING1: '
-    Action:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1696312326}
-          m_TargetAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
-          m_MethodName: set_text
-          m_Mode: 0
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-    isSubstring: 1
-  - command: 'RND: '
-    Action:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 234435621}
-          m_TargetAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
-          m_MethodName: set_text
-          m_Mode: 0
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-    isSubstring: 0
---- !u!4 &633825768
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 633825766}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -1193,7 +1081,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -375, y: 127}
-  m_SizeDelta: {x: 200, y: 50}
+  m_SizeDelta: {x: 539.38, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1696312326
 MonoBehaviour:
@@ -1215,7 +1103,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'TIMMING: '
+  m_text: 'Data here '
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1694,3 +1582,136 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2113144324}
   m_CullTransparentMesh: 1
+--- !u!1001 &3515912940989759117
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 3515912941463656293, guid: d044ce5c37f1bed468da6e064f7b31da, type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3515912941463656293, guid: d044ce5c37f1bed468da6e064f7b31da, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3515912941463656293, guid: d044ce5c37f1bed468da6e064f7b31da, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3515912941463656293, guid: d044ce5c37f1bed468da6e064f7b31da, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3515912941463656293, guid: d044ce5c37f1bed468da6e064f7b31da, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3515912941463656293, guid: d044ce5c37f1bed468da6e064f7b31da, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3515912941463656293, guid: d044ce5c37f1bed468da6e064f7b31da, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3515912941463656293, guid: d044ce5c37f1bed468da6e064f7b31da, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3515912941463656293, guid: d044ce5c37f1bed468da6e064f7b31da, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3515912941463656293, guid: d044ce5c37f1bed468da6e064f7b31da, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3515912941463656293, guid: d044ce5c37f1bed468da6e064f7b31da, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3515912941463656298, guid: d044ce5c37f1bed468da6e064f7b31da, type: 3}
+      propertyPath: elements.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3515912941463656298, guid: d044ce5c37f1bed468da6e064f7b31da, type: 3}
+      propertyPath: isOnDataRecivedUsing
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3515912941463656298, guid: d044ce5c37f1bed468da6e064f7b31da, type: 3}
+      propertyPath: onDataRecived.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3515912941463656298, guid: d044ce5c37f1bed468da6e064f7b31da, type: 3}
+      propertyPath: onTimeMeasured.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3515912941463656298, guid: d044ce5c37f1bed468da6e064f7b31da, type: 3}
+      propertyPath: onDataRecived.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3515912941463656298, guid: d044ce5c37f1bed468da6e064f7b31da, type: 3}
+      propertyPath: onTimeMeasured.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3515912941463656298, guid: d044ce5c37f1bed468da6e064f7b31da, type: 3}
+      propertyPath: onDataRecived.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1696312326}
+    - target: {fileID: 3515912941463656298, guid: d044ce5c37f1bed468da6e064f7b31da, type: 3}
+      propertyPath: onPortsUpdated.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 319342135}
+    - target: {fileID: 3515912941463656298, guid: d044ce5c37f1bed468da6e064f7b31da, type: 3}
+      propertyPath: onTimeMeasured.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 234435619}
+    - target: {fileID: 3515912941463656298, guid: d044ce5c37f1bed468da6e064f7b31da, type: 3}
+      propertyPath: onDataRecived.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3515912941463656298, guid: d044ce5c37f1bed468da6e064f7b31da, type: 3}
+      propertyPath: elements.Array.data[0].Action.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3515912941463656298, guid: d044ce5c37f1bed468da6e064f7b31da, type: 3}
+      propertyPath: onDataRecived.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: set_text
+      objectReference: {fileID: 0}
+    - target: {fileID: 3515912941463656298, guid: d044ce5c37f1bed468da6e064f7b31da, type: 3}
+      propertyPath: onTimeMeasured.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3515912941463656298, guid: d044ce5c37f1bed468da6e064f7b31da, type: 3}
+      propertyPath: elements.Array.data[0].Action.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3515912941463656298, guid: d044ce5c37f1bed468da6e064f7b31da, type: 3}
+      propertyPath: elements.Array.data[0].Action.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3515912941463656298, guid: d044ce5c37f1bed468da6e064f7b31da, type: 3}
+      propertyPath: elements.Array.data[1].Action.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 234435621}
+    - target: {fileID: 3515912941463656298, guid: d044ce5c37f1bed468da6e064f7b31da, type: 3}
+      propertyPath: onDataRecived.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: TMPro.TMP_Text, Unity.TextMeshPro
+      objectReference: {fileID: 0}
+    - target: {fileID: 3515912941463656298, guid: d044ce5c37f1bed468da6e064f7b31da, type: 3}
+      propertyPath: elements.Array.data[0].Action.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3515912941463656298, guid: d044ce5c37f1bed468da6e064f7b31da, type: 3}
+      propertyPath: onDataRecived.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 3515912941463656299, guid: d044ce5c37f1bed468da6e064f7b31da, type: 3}
+      propertyPath: m_Name
+      value: SerialPortManager
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: d044ce5c37f1bed468da6e064f7b31da, type: 3}

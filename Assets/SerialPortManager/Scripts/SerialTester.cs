@@ -8,7 +8,7 @@ public class SerialTester : MonoBehaviour
     public List<string> ports;
     public void ChooseSecondCOMPort()
     {
-        SerialPortManager.instance.TrySetPort(SerialPortManager.instance.availablePortNamesList[1], PortSpeed.SP9600);
+        SerialPortManager.instance.TrySetPort(SerialPortManager.instance.availablePortNamesList[0], PortSpeed.SP115200);
     }
     public void ClosePort()
     {

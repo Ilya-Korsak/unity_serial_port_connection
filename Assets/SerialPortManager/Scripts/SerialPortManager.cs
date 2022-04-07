@@ -1,11 +1,10 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO.Ports;
 using UnityEngine.Events;
 using System;
 using System.Threading;
-using System.Reflection;
+using System.Linq;
 
 public enum PortSpeed : int
 {
@@ -37,15 +36,22 @@ public class SerialPortManager : MonoBehaviour
     [Header("Com port events")]
     public UnityEvent<List<string>> onPortsUpdated;
     public UnityEvent<string> onDataRecived;
+    public UnityEvent<double> onTimeMeasured;
     [SerializeField]
     [Tooltip("If you gonna to use onDataRecive - set TRUE, if not - FALSE")]
     private bool isOnDataRecivedUsing = true;
+    [SerializeField]
+    [Tooltip("If you gonna to use onTimeMeasured - set TRUE, if not - FALSE")]
+    private bool isOnTimeMeasured = false;
     [Header("Serial Parser")]
     [Tooltip("Returns string after keyword")]
     public ParserElement[] elements;
 
     private event Action mainThreadQueuedCallbacks;
     private event Action eventsClone;
+
+
+    private string finalString;
     private bool CompareLists(List<string> list1, List<string> list2)
     {
         if (list1.Count != list2.Count)
@@ -103,8 +109,41 @@ public class SerialPortManager : MonoBehaviour
         }
         return index;
     }
+    private void ProvideToUnity(string inputString)
+    {
+        for (int i = 0; i < elements.Length; i++)
+        {
+            int index = CompareCommand(elements[i].command, inputString);
+            if (index != -1 && elements[i].isSubstring)
+            {
+                ParserElement pElm = elements[i];
+                string stringToSent = inputString.Substring(index);
+                mainThreadQueuedCallbacks += () =>
+                {
+                    pElm.Action.Invoke(stringToSent);
+                };
+            }
+            else if (index != -1 && !elements[i].isSubstring)
+            {
+                ParserElement pElm = elements[i];
+                mainThreadQueuedCallbacks += () =>
+                {
+                    pElm.Action.Invoke(inputString);
+                };
+            }
+        }
+        if (isOnDataRecivedUsing)
+        {
+            mainThreadQueuedCallbacks += () => {
+                onDataRecived.Invoke(inputString);
+            };
+        }
+    }
     private void ReceiveMessage()
     {
+        //Stopwatch stopwatch = new Stopwatch();
+        DateTime start = DateTime.Now;
+        double lastReadedTime;
         {
             while (true)
             {
@@ -121,33 +160,44 @@ public class SerialPortManager : MonoBehaviour
                         {
                             if (selectedPort.BytesToRead > 0)
                             {
-                                string serialString = selectedPort.ReadLine();
-                                for (int i = 0; i < elements.Length; i++)
+                                int bytes = selectedPort.BytesToRead;
+                                //Debug.Log("!!!!!!!!");
+                               // Debug.Log(selectedPort.ReadExisting());
+                                /*char[] buf = new char[bytes];
+                                selectedPort.Read(buf, 0, bytes);
+                                for(int i=0; i< bytes; i++)
                                 {
-                                    int index = CompareCommand(elements[i].command, serialString);
-                                    if (index != -1 && elements[i].isSubstring)
-                                    {
-                                        ParserElement pElm = elements[i];
-                                        string stringToSent = serialString.Substring(index);
-                                        mainThreadQueuedCallbacks += () =>
-                                        {
-                                            pElm.Action.Invoke(stringToSent);
-                                        };
-                                    }
-                                    else if (index != -1 && !elements[i].isSubstring)
-                                    {
-                                        ParserElement pElm = elements[i];
-                                        mainThreadQueuedCallbacks += () =>
-                                        {
-                                            pElm.Action.Invoke(serialString);
-                                        };
-                                    }
-                                }
-                                if (isOnDataRecivedUsing)
+                                    Debug.Log(buf[i]);
+                                }*/
+                                //Debug.Log("+++++");
+                                DateTime end = DateTime.Now;
+                                TimeSpan ts = (end - start);
+                                start = DateTime.Now;
+                                lastReadedTime = ts.TotalMilliseconds;//stopwatch.ElapsedMilliseconds;
+                                //stopwatch = new Stopwatch();
+                                string serialString = selectedPort.ReadExisting();//selectedPort.ReadLine();
+                                double timeMeasured = lastReadedTime;
+                                if (isOnTimeMeasured)
                                 {
-                                    mainThreadQueuedCallbacks += () => {
-                                        onDataRecived.Invoke(serialString);
+                                    mainThreadQueuedCallbacks += () =>
+                                    {
+                                        UnityEngine.Debug.Log("Time: " + timeMeasured);
+                                        onTimeMeasured.Invoke(timeMeasured);
                                     };
+                                }
+                                for (int i = 0; i < serialString.Length; i++)
+                                {
+                                    if (serialString[i] == '\n')
+                                    {
+                                        finalString += '\0';
+                                        string testString = new string(finalString.Where(c => !char.IsControl(c)).ToArray());//finalString.ToString();
+                                        finalString = "";
+                                        ProvideToUnity(serialString);
+                                    }
+                                    else
+                                    {
+                                        finalString += serialString[i];
+                                    }
                                 }
                             }
                         }
@@ -173,15 +223,17 @@ public class SerialPortManager : MonoBehaviour
             if (!selectedPort.IsOpen)
             {
                 print("Opening " + portName + ", baud " + (int)baudRate);
-                selectedPort.Open();
-                selectedPort.ReadTimeout = 10;
                 selectedPort.Handshake = Handshake.None;
+                selectedPort.DtrEnable = true;
+                selectedPort.RtsEnable = true;
+                selectedPort.ReadTimeout = 1000;
+                selectedPort.Open();
                 if (selectedPort.IsOpen) { print("Open"); }
             }
         }
         catch
         {
-            Debug.Log("Port is not opend");
+            UnityEngine.Debug.Log("Port is not opend");
         }
     }
     public void TryClosePort()
